@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dynamic Hash PayHere Checkout</title>
+  <style>
+    form input, form strong, form br {
+      display: block;
+      margin-bottom: 10px;
+    }
+    form input[type="submit"] {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <form id="payhere-form" method="post" action="https://sandbox.payhere.lk/pay/checkout">   
+    <input type="hidden" name="merchant_id" value="1224373">
+    <input type="hidden" name="return_url" value="http://google.com/return">
+    <input type="hidden" name="cancel_url" value="http://google.com/cancel">
+    <input type="hidden" name="notify_url" value="https://google.com/notify">
+
+    <strong>Item Details</strong>
+    <input type="text" name="order_id" value="ORDER123">
+    <input type="text" name="items" value="Test Item">
+    <input type="text" name="currency" value="LKR">
+    <input type="text" name="amount" value="1000.00">  
+
+    <strong>Customer Details</strong>
+    <input type="text" name="first_name" value="Tester">
+    <input type="text" name="last_name" value="Disal">
+    <input type="text" name="email" value="rmdhenuka12345@gmail.com">
+    <input type="text" name="phone" value="0769967702">
+    <input type="text" name="address" value="Test Address">
+    <input type="text" name="city" value="Colombo">
+    <input type="hidden" name="country" value="Sri Lanka">
+
+    <!-- HASH will be injected here -->
+    <input type="hidden" name="hash" id="hash-field">
+
+    <input type="submit" value="Buy Now">   
+  </form>
+
+  <script>
+    const form = document.getElementById('payhere-form');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const order_id = form.order_id.value;
+      const amount = form.amount.value;
+      const currency = form.currency.value;
+
+      try {
+        const res = await fetch('/generate-hash', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ order_id, amount, currency })
+        });
+
+        const data = await res.json();
+
+        // Set the generated hash
+        document.getElementById('hash-field').value = data.hash;
+
+        // Submit form to PayHere after hash is added
+        form.submit();
+      } catch (err) {
+        alert('⚠️ Failed to generate hash. Please try again.');
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

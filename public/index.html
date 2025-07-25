@@ -1,39 +1,37 @@
-<html>
-  <head>
-    <style>
-      form input, form strong, form br {
-        display: block;
-        margin-bottom: 10px;
-      }
-      form input[type="submit"] {
-        margin-top: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <form method="post" action="https://sandbox.payhere.lk/pay/checkout">   
-      <input type="hidden" name="merchant_id" value="1224373"> <!-- Your Merchant ID -->
-      <input type="hidden" name="return_url" value="http://google.com/return">
-      <input type="hidden" name="cancel_url" value="http://google.com/cancel">
-      <input type="hidden" name="notify_url" value="https://google.com/notify">  
-
-      <strong>Item Details</strong>
-      <input type="text" name="order_id" value="ORDER123">
-      <input type="text" name="items" value="Test Item">
-      <input type="text" name="currency" value="LKR">
-      <input type="text" name="amount" value="1000.00">  
-
-      <strong>Customer Details</strong>
-      <input type="text" name="first_name" value="Tester">
-      <input type="text" name="last_name" value="Disal">
-      <input type="text" name="email" value="rmdhenuka12345@gmail.com">
-      <input type="text" name="phone" value="0769967702">
-      <input type="text" name="address" value="Test Address">
-      <input type="text" name="city" value="Colombo">
-      <input type="hidden" name="country" value="Sri Lanka">
-
-      <input type="hidden" name="hash" value="F8D04ED24F0FCB89C339E15F2C809365"> <!-- Your Generated Hash -->
-      <input type="submit" value="Buy Now">   
-    </form> 
-  </body>
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Choose API</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .btn {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 25px;
+      background: #0070f3;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose API to Use</h1>
+  <a class="btn" href="checkout.html">PayHere Checkout</a>
+  <a class="btn" href="Recuring.html">Recurring API</a>
+  <a class="btn" href="Preapproval.html">PayHere Preapproval</a>
+  <a class="btn" href="Charging.html">Charging API</a>
+  <a class="btn" href="Retrieval.html">Retrieval API</a>
+  <a class="btn" href="Subscription Manager.html">Subscription Manager API</a>
+  <a class="btn" href="Refund.html">Refund API</a>
+  <a class="btn" href="Authorize.html">Authorize API</a>
+  <a class="btn" href="Capture.html">Capture API</a>
+</body>
 </html>

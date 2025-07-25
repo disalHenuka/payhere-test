@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PayHere Recurring</title>
+  <style>
+    form input, form select, form strong, form br {
+      display: block;
+      margin-bottom: 10px;
+    }
+    form input[type="submit"] {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Recurring Payment</h1>
+  <form id="recurringForm" method="post" action="https://sandbox.payhere.lk/pay/checkout">   
+    <input type="hidden" name="merchant_id" value="1224373">
+    <input type="hidden" name="return_url" value="https://google.com/return">
+    <input type="hidden" name="cancel_url" value="https://google.com/cancel">
+    <input type="hidden" name="notify_url" value="https://google.com/notify">  
+
+    <strong>Item Details</strong>
+    <input type="text" name="order_id" value="REC123">
+    <input type="text" name="items" value="Recurring Donation">
+    <input type="text" name="currency" value="LKR">
+    <input type="text" name="amount" value="1500.00">  
+
+    <!-- Recurrence Dropdowns -->
+    <label><strong>Recurrence</strong></label>
+    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+      <select id="recurrenceNumber" style="flex: none; width: 60px;">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
+      <select id="recurrencePeriod" style="flex: none; width: 100px;">
+        <option value="Week">Week</option>
+        <option value="Month" selected>Month</option>
+        <option value="Year">Year</option>
+      </select>
+    </div>
+    <input type="hidden" name="recurrence" id="recurrence">
+
+    <!-- Duration Dropdown -->
+    <label><strong>Duration</strong></label>
+    <select id="durationSelector">
+      <option value="Forever" selected>Forever</option>
+      <option value="1 Month">1 Month</option>
+      <option value="2 Month">2 Month</option>
+      <option value="3 Month">3 Month</option>
+      <option value="4 Month">4 Month</option>
+      <option value="5 Month">5 Month</option>
+      <option value="6 Month">6 Month</option>
+      <option value="1 Year">1 Year</option>
+      <option value="2 Year">2 Year</option>
+      <option value="3 Year">3 Year</option>
+      <option value="4 Year">4 Year</option>
+      <option value="5 Year">5 Year</option>
+    </select>
+    <input type="hidden" name="duration" id="duration">
+
+    <strong>Customer Details</strong>
+    <input type="text" name="first_name" value="Recurring">
+    <input type="text" name="last_name" value="Customer">
+    <input type="text" name="email" value="recurring@example.com">
+    <input type="text" name="phone" value="0712345678">
+    <input type="text" name="address" value="123 Recurring Lane">
+    <input type="text" name="city" value="Colombo">
+    <input type="hidden" name="country" value="Sri Lanka">
+
+    <input type="hidden" name="hash" id="hash">
+    <input type="submit" value="Subscribe">   
+  </form> 
+
+  <script>
+    const form = document.getElementById('recurringForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const recNum = document.getElementById('recurrenceNumber').value;
+      const recPeriod = document.getElementById('recurrencePeriod').value;
+      document.getElementById('recurrence').value = `${recNum} ${recPeriod}`;
+
+      const duration = document.getElementById('durationSelector').value;
+      document.getElementById('duration').value = duration;
+
+      const order_id = form.querySelector('input[name="order_id"]').value;
+      const amount = form.querySelector('input[name="amount"]').value;
+      const currency = form.querySelector('input[name="currency"]').value;
+
+      try {
+        const res = await fetch('/generate-hash', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id, amount, currency })
+        });
+
+        const data = await res.json();
+
+        if (data.hash) {
+          document.getElementById('hash').value = data.hash;
+          form.submit(); // Submit after hash is injected
+        } else {
+          alert('❌ Failed to generate hash');
+        }
+      } catch (err) {
+        console.error('Hash generation failed:', err);
+        alert('❌ Error generating hash');
+      }
+    });
+  </script>
+</body>
+</html>
